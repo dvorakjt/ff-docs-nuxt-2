@@ -6,7 +6,7 @@
   >
     <header :style="headerStyles" v-if="showHeader">
       <div class="navbar-left">
-        <NuxtLink to="/">
+        <NuxtLink :to="ROUTES.INTRO_PAGE">
           <NuxtImg
             :id="ANIMATED_ELEMENT_IDS.HEADER.LOGO"
             src="/images/ff-logo.svg"
@@ -18,7 +18,7 @@
         <nav class="primary-navigation animated">
           <ul>
             <li>
-              <NuxtLink to="/home">Home</NuxtLink>
+              <NuxtLink :to="ROUTES.HOME_PAGE">Home</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/docs">Docs</NuxtLink>
@@ -66,6 +66,7 @@
 
 <script setup lang="ts">
 import {
+  ROUTES,
   PAGE_PADDING,
   ANIMATED_ELEMENT_IDS,
   COLLAPSED_LOGO_DIMENSIONS,
@@ -88,6 +89,15 @@ const { onBeforeHeaderLeave, onHeaderEnter } = useHeaderTransitionHooks();
 </script>
 
 <style scoped>
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .header-enter-active {
   animation: 0.4s linear 1 forwards slide-down;
 }

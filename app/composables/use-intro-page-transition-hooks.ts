@@ -18,9 +18,11 @@ export function useIntroPageTransitionHooks() {
     const hero = introPage.querySelector(
       "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO
     )!;
+
     const heading = introPage.querySelector(
       "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
     )!;
+
     recordHeroRect(hero);
     recordHeadingRect(heading);
   }

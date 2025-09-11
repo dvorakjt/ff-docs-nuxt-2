@@ -12,16 +12,17 @@
       Fully Formed
     </h1>
     <p class="tagline">
-      Flawless forms, <NuxtLink to="/home">just add water.</NuxtLink>
+      Flawless forms,
+      <NuxtLink :to="ROUTES.HOME_PAGE">just add water.</NuxtLink>
     </p>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ANIMATED_ELEMENT_IDS } from "~/constants";
+import { ROUTES, ANIMATED_ELEMENT_IDS } from "~/constants";
 
 definePageMeta({
-  path: "/",
+  path: ROUTES.INTRO_PAGE,
 });
 </script>
 
@@ -33,6 +34,9 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  /* Keep the FF icon above the navbar during transitions */
+  z-index: 2;
 }
 
 .hero {

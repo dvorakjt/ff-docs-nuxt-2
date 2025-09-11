@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { ANIMATED_ELEMENT_IDS } from "~/constants";
+import { ROUTES, ANIMATED_ELEMENT_IDS } from "~/constants";
 
 definePageMeta({
-  path: "/home",
+  path: ROUTES.HOME_PAGE,
 });
 </script>
 

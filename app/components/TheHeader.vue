@@ -21,7 +21,7 @@
               <NuxtLink :to="ROUTES.HOME_PAGE">Home</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/docs">Docs</NuxtLink>
+              <NuxtLink :to="ROUTES.DOCS_PAGE">Docs</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/apireference">API Reference</NuxtLink>

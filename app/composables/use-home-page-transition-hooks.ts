@@ -37,31 +37,37 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
     homePage: Element,
     timeline: GSAPTimeline
   ) {
-    const { translateX, translateY } = calculateInvertedPageState(homePage);
-
-    $gsap.set(homePage, {
-      x: translateX,
-      y: translateY,
-    });
-
-    timeline.to(
-      homePage,
-      {
-        x: 0,
-        y: 0,
-        scaleX: 1,
-        scaleY: 1,
-        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
-          unit: "seconds",
-        }),
-        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
-      },
-      0
-    );
+    const { translateX, translateY } = calculateInvertedElementsState(homePage);
 
     const heading = homePage.querySelector(
       "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING
     )!;
+
+    const taglineContainer = homePage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.TAGLINE_CONTAINER
+    );
+
+    const elementsToInvert = [heading, taglineContainer];
+
+    elementsToInvert.forEach((el) => {
+      $gsap.set(el, {
+        x: translateX,
+        y: translateY,
+      });
+
+      timeline.to(
+        el,
+        {
+          x: 0,
+          y: 0,
+          duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+            unit: "seconds",
+          }),
+          ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+        },
+        0
+      );
+    });
 
     touchElementsExceptExcludedElementsAndTheirAncestors(
       homePage,
@@ -83,7 +89,7 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
     );
   }
 
-  function calculateInvertedPageState(homePage: Element) {
+  function calculateInvertedElementsState(homePage: Element) {
     const heading = homePage.querySelector(
       "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING
     )!;

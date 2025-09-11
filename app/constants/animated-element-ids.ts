@@ -6,11 +6,14 @@ export const ANIMATED_ELEMENT_IDS = <const>{
     CANVAS: "background-canvas",
   },
   INTRO_PAGE: {
-    HERO_CONTAINER: "intro-page-hero-container",
     HERO: "intro-page-hero",
+    HERO_CONTAINER: "intro-page-hero-container",
     HEADING: "intro-page-heading",
+    TAGLINE: "intro-page-tagline",
   },
   HOME_PAGE: {
     HEADING: "home-page-heading",
+    HEADING_CONTAINER: "home-page-heading-container",
+    TAGLINE_CONTAINER: "home-page-tagline-container",
   },
 };

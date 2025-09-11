@@ -1,16 +1,23 @@
 <template>
   <main>
     <section class="hero">
-      <h1 :id="ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING" class="heading">
-        Fully Formed
-      </h1>
-      <p class="tagline">
-        Fully Formed provides powerful, type-safe, design-agnostic form state
-        management for React with TypeScript.
-      </p>
-      <div class="hero-buttons">
-        <BaseButton variant="primary">Get Started</BaseButton>
-        <BaseButton variant="secondary">Learn More</BaseButton>
+      <div :id="ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING_CONTAINER">
+        <h1 :id="ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING" class="heading">
+          Fully Formed
+        </h1>
+      </div>
+      <div
+        :id="ANIMATED_ELEMENT_IDS.HOME_PAGE.TAGLINE_CONTAINER"
+        class="tagline-container"
+      >
+        <p class="tagline">
+          Fully Formed provides powerful, type-safe, design-agnostic form state
+          management for React with TypeScript.
+        </p>
+        <div class="hero-buttons">
+          <BaseButton variant="primary">Get Started</BaseButton>
+          <BaseButton variant="secondary">Learn More</BaseButton>
+        </div>
       </div>
     </section>
   </main>
@@ -39,6 +46,13 @@ definePageMeta({
   font-size: 45px;
   text-align: center;
   margin-bottom: 50px;
+}
+
+.tagline-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* todo: add media queries */

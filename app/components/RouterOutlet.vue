@@ -3,13 +3,15 @@
     name="page"
     @before-leave="onBeforePageLeave"
     @enter="onPageEnter"
+    @leave="onPageLeave"
   >
     <NuxtPage />
   </Transition>
 </template>
 
 <script setup lang="ts">
-const { onBeforePageLeave, onPageEnter } = usePageTransitionHooks();
+const { onBeforePageLeave, onPageEnter, onPageLeave } =
+  usePageTransitionHooks();
 </script>
 
 <style scoped>

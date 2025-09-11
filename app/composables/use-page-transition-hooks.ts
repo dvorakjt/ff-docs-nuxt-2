@@ -3,13 +3,14 @@ import { ROUTES } from "~/constants";
 interface PageTransitionHooks {
   onBeforePageLeave: (page: Element) => void;
   onPageEnter: (page: Element, done: () => void) => void;
+  onPageLeave: (page: Element, done: () => void) => void;
 }
 
 export function usePageTransitionHooks(): PageTransitionHooks {
   const routeTransitionsStore = useRouteTransitionsStore();
   const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
 
-  const { onBeforeIntroPageLeave, onIntroPageEnterFromAnyPage } =
+  const { onBeforeIntroPageLeave, onIntroPageEnter, onIntroPageLeave } =
     useIntroPageTransitionHooks();
 
   const { onBeforeHomePageLeave, onHomePageEnterFromIntroPage } =
@@ -28,7 +29,7 @@ export function usePageTransitionHooks(): PageTransitionHooks {
 
   function onPageEnter(page: Element, done: () => void) {
     if (routeTransitionsStore.to === ROUTES.INTRO_PAGE) {
-      onIntroPageEnterFromAnyPage(page, done);
+      onIntroPageEnter(page, done);
     } else if (
       routeTransitionsStore.to === ROUTES.HOME_PAGE &&
       routeTransitionsStore.from === ROUTES.INTRO_PAGE
@@ -37,8 +38,17 @@ export function usePageTransitionHooks(): PageTransitionHooks {
     }
   }
 
+  function onPageLeave(page: Element, done: () => void) {
+    if (routeTransitionsStore.from === ROUTES.INTRO_PAGE) {
+      onIntroPageLeave(page, done);
+    } else {
+      done();
+    }
+  }
+
   return {
     onBeforePageLeave,
     onPageEnter,
+    onPageLeave,
   };
 }

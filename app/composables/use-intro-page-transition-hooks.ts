@@ -1,17 +1,22 @@
 import {
   ANIMATED_ELEMENT_IDS,
   PAGE_TRANSITION_ANIMATION_PROPERTIES,
+  ROUTES,
 } from "~/constants";
-import { touchElementsExceptExcludedElementsAndTheirAncestors } from "~/util/touch-elements-except-excluded-elements-and-their-ancestors";
+import {
+  touchElementsExceptExcludedElementsAndTheirAncestors,
+  addFadeOutAnimationToTimeline,
+} from "~/util";
 
 interface IntroPageTransitionHooks {
   onBeforeIntroPageLeave: (introPage: Element) => void;
-  onIntroPageEnterFromHomePage: (introPage: Element, done: () => void) => void;
-  onIntroPageEnterFromAnyPage: (introPage: Element, done: () => void) => void;
+  onIntroPageEnter: (introPage: Element, done: () => void) => void;
+  onIntroPageLeave: (introPage: Element, done: () => void) => void;
 }
 
-export function useIntroPageTransitionHooks() {
+export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
   const { $gsap } = useNuxtApp();
+  const routeTransitionsStore = useRouteTransitionsStore();
   const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
 
   function onBeforeIntroPageLeave(introPage: Element) {
@@ -39,11 +44,35 @@ export function useIntroPageTransitionHooks() {
       headingRect;
   }
 
-  function onIntroPageEnterFromAnyPage(introPage: Element, done: () => void) {
+  function onIntroPageEnter(introPage: Element, done: () => void) {
+    if (shouldExecuteFullAnimationOnEnter()) {
+      onIntroPageEnterWithFullAnimation(introPage, done);
+    } else {
+      onIntroPageEnterWithFadeInOnly(introPage, done);
+    }
+  }
+
+  function shouldExecuteFullAnimationOnEnter() {
+    if (routeTransitionsStore.from === ROUTES.HOME_PAGE) {
+      const homePageHeadingRect =
+        pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
+      const isHomePageHeadingVisible =
+        homePageHeadingRect.bottom > 0 &&
+        homePageHeadingRect.top < window.innerHeight;
+      return isHomePageHeadingVisible;
+    }
+
+    return false;
+  }
+
+  function onIntroPageEnterWithFullAnimation(
+    introPage: Element,
+    done: () => void
+  ) {
     const timeline = $gsap.timeline().paused(true);
-
     addHeroAnimationToTimeline(introPage, timeline);
-
+    addHeadingAnimationToTimeline(introPage, timeline);
+    addTaglineEnterAnimationToTimeline(introPage, timeline);
     timeline.play().then(() => done());
   }
 
@@ -88,44 +117,197 @@ export function useIntroPageTransitionHooks() {
       pageTransitionAnimationsStore.lastKnownElementRects.header.logo!;
 
     const translateX = lastKnownHeaderLogoRect.x - heroRect.x;
-
     const translateY = lastKnownHeaderLogoRect.y - heroRect.y;
 
     const scaleX = lastKnownHeaderLogoRect.width / heroRect.width;
-
     const scaleY = lastKnownHeaderLogoRect.height / heroRect.height;
 
     return { translateX, translateY, scaleX, scaleY };
   }
 
-  // function addFadeInAnimationToTimeline(introPage: Element) {
-  //   const hero = introPage
-  //   const heading = introPage.querySelector(
-  //     "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
-  //   )!;
+  function addHeadingAnimationToTimeline(
+    introPage: Element,
+    timeline: GSAPTimeline
+  ) {
+    const heading = introPage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
+    )!;
 
-  //   touchElementsExceptExcludedElementsAndTheirAncestors(
-  //     introPage,
-  //     [heading],
-  //     (el) => {
-  //       $gsap.set(el, { opacity: 0 });
+    const { translateX, translateY } = calculateInvertedHeadingState(heading);
 
-  //       pageTransitionAnimationsStore.pageEnterTimeline!.to(
-  //         el,
-  //         {
-  //           opacity: 1,
-  //           duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
-  //             unit: "seconds",
-  //           }),
-  //         },
-  //         0
-  //       );
-  //     }
-  //   );
-  // }
+    $gsap.set(heading, {
+      x: translateX,
+      y: translateY,
+    });
+
+    timeline.to(
+      heading,
+      {
+        x: 0,
+        y: 0,
+        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+          unit: "seconds",
+        }),
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+      },
+      0
+    );
+  }
+
+  function calculateInvertedHeadingState(heading: Element) {
+    const headingRect = heading.getBoundingClientRect();
+
+    const lastKnownHomePageHeadingRect =
+      pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
+
+    const translateX = lastKnownHomePageHeadingRect.x - headingRect.x;
+    const translateY = lastKnownHomePageHeadingRect.y - headingRect.y;
+
+    return { translateX, translateY };
+  }
+
+  function addTaglineEnterAnimationToTimeline(
+    introPage: Element,
+    timeline: GSAPTimeline
+  ) {
+    const tagline = introPage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.TAGLINE
+    )!;
+
+    const { translateY } = calculateInvertedTaglineState(tagline);
+
+    $gsap.set(tagline, {
+      opacity: 0,
+      translateY,
+    });
+
+    timeline.to(
+      tagline,
+      {
+        opacity: 1,
+        translateY: 0,
+        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+          unit: "seconds",
+        }),
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+      },
+      0
+    );
+  }
+
+  function calculateInvertedTaglineState(tagline: Element) {
+    const taglineRect = tagline.getBoundingClientRect();
+
+    const lastKnownHomePageHeadingRect =
+      pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
+
+    const translateY = lastKnownHomePageHeadingRect.y - taglineRect.y;
+
+    return { translateY };
+  }
+
+  function onIntroPageEnterWithFadeInOnly(
+    introPage: Element,
+    done: () => void
+  ) {
+    const timeline = $gsap.timeline().paused(true);
+    addHeroAnimationToTimeline(introPage, timeline);
+    addWholePageFadeInToTimeline(introPage, timeline);
+    timeline.play().then(() => done());
+  }
+
+  function addWholePageFadeInToTimeline(
+    introPage: Element,
+    timeline: GSAPTimeline
+  ) {
+    const hero = introPage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO
+    )!;
+
+    touchElementsExceptExcludedElementsAndTheirAncestors(
+      introPage,
+      [hero],
+      (el) => {
+        $gsap.set(el, { opacity: 0 });
+        timeline.to(
+          el,
+          {
+            opacity: 1,
+            duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+              unit: "seconds",
+            }),
+            ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+          },
+          0
+        );
+      }
+    );
+  }
+
+  function onIntroPageLeave(introPage: Element, done: () => void) {
+    const timeline = $gsap.timeline().paused(true);
+
+    if (shouldAnimateTaglineOnLeave()) {
+      // only hide the heading if it will be translated
+      const heading = introPage.querySelector(
+        "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
+      );
+      $gsap.set(heading, { visibility: "hidden" });
+      addTaglineLeaveAnimationToTimeline(introPage, timeline).then(() => {
+        timeline.play().then(() => done());
+      });
+    } else {
+      addFadeOutAnimationToTimeline(introPage, timeline);
+      timeline.play().then(() => done());
+    }
+  }
+
+  // scroll position for the other page may be remembered, so this should
+  // execute inside nextTick!
+  function shouldAnimateTaglineOnLeave() {
+    return routeTransitionsStore.to === ROUTES.HOME_PAGE;
+  }
+
+  function addTaglineLeaveAnimationToTimeline(
+    introPage: Element,
+    timeline: GSAPTimeline
+  ): Promise<void> {
+    return nextTick(() => {
+      const tagline = introPage.querySelector(
+        "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.TAGLINE
+      )!;
+
+      const { translateY } = calculateTaglineLeaveTo(tagline);
+
+      timeline.to(
+        tagline,
+        {
+          opacity: 0,
+          translateY,
+          duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+            unit: "seconds",
+          }),
+          ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+        },
+        0
+      );
+    });
+  }
+
+  function calculateTaglineLeaveTo(tagline: Element) {
+    const taglineRect = tagline.getBoundingClientRect();
+    const homePageHeadingContainer = document.getElementById(
+      ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING_CONTAINER
+    )!;
+    const homePageHeadingContainerRect =
+      homePageHeadingContainer.getBoundingClientRect();
+    const translateY = homePageHeadingContainerRect.y - taglineRect.y;
+    return { translateY };
+  }
 
   return {
     onBeforeIntroPageLeave,
-    onIntroPageEnterFromAnyPage,
+    onIntroPageEnter,
+    onIntroPageLeave,
   };
 }

@@ -45,7 +45,7 @@ export function useHeaderTransitionHooks(): HeaderTransitionHooks {
         duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
           unit: "seconds",
         }),
-        ease: "none",
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
       },
       0
     );

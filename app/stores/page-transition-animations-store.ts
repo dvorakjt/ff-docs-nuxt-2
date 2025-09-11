@@ -3,7 +3,6 @@ import type { BackgroundMode } from "~/model";
 interface PageTransitionAnimationsStoreState {
   showHeader: boolean;
   backgroundMode: BackgroundMode;
-  pageEnterTimeline: GSAPTimeline | null;
   lastKnownElementRects: {
     header: {
       logo: DOMRect | null;
@@ -28,7 +27,6 @@ export const usePageTransitionAnimationsStore = defineStore<
     return {
       showHeader: route.path !== "/",
       backgroundMode: route.path === "/" ? "collapsed" : "expanded",
-      pageEnterTimeline: null,
       lastKnownElementRects: {
         header: {
           logo: null,

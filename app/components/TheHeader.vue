@@ -81,12 +81,8 @@ const logoStyles = {
   marginTop: PAGE_PADDING.TOP + "px",
 };
 
-// const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
-// const { showHeader } = storeToRefs(pageTransitionAnimationsStore);
-const route = useRoute();
-const showHeader = computed(() => {
-  return route.path !== "/";
-});
+const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
+const { showHeader } = storeToRefs(pageTransitionAnimationsStore);
 
 const { onBeforeHeaderLeave, onHeaderEnter } = useHeaderTransitionHooks();
 </script>

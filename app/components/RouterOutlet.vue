@@ -1,8 +1,16 @@
 <template>
-  <Transition name="page">
+  <Transition
+    name="page"
+    @before-leave="onBeforePageLeave"
+    @enter="onPageEnter"
+  >
     <NuxtPage />
   </Transition>
 </template>
+
+<script setup lang="ts">
+const { onBeforePageLeave, onPageEnter } = usePageTransitionHooks();
+</script>
 
 <style scoped>
 .page-enter-from,

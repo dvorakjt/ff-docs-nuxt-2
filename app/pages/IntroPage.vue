@@ -1,11 +1,13 @@
 <template>
   <main>
-    <NuxtImg
-      :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO"
-      class="hero"
-      src="/images/ff-logo.svg"
-      alt="Fully Formed logo"
-    />
+    <div :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO_CONTAINER">
+      <NuxtImg
+        :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO"
+        class="hero"
+        src="/images/ff-logo.svg"
+        alt="Fully Formed logo"
+      />
+    </div>
     <h1 :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING" class="heading">
       Fully Formed
     </h1>

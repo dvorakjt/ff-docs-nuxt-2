@@ -1,15 +1,16 @@
 export const ANIMATED_ELEMENT_IDS = <const>{
   HEADER: {
-    LOGO: "logo",
+    LOGO: "header-logo",
   },
   BACKGROUND: {
     CANVAS: "background-canvas",
   },
   INTRO_PAGE: {
-    HERO: "hero",
+    HERO_CONTAINER: "intro-page-hero-container",
+    HERO: "intro-page-hero",
     HEADING: "intro-page-heading",
   },
   HOME_PAGE: {
-    HEADING: "intro-page-heading",
+    HEADING: "home-page-heading",
   },
 };

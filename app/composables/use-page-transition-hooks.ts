@@ -13,7 +13,7 @@ export function usePageTransitionHooks(): PageTransitionHooks {
   const { onBeforeIntroPageLeave, onIntroPageEnter, onIntroPageLeave } =
     useIntroPageTransitionHooks();
 
-  const { onBeforeHomePageLeave, onHomePageEnterFromIntroPage } =
+  const { onBeforeHomePageLeave, onHomePageEnter, onHomePageLeave } =
     useHomePageTransitionHooks();
 
   function onBeforePageLeave(page: Element) {
@@ -28,21 +28,28 @@ export function usePageTransitionHooks(): PageTransitionHooks {
   }
 
   function onPageEnter(page: Element, done: () => void) {
-    if (routeTransitionsStore.to === ROUTES.INTRO_PAGE) {
-      onIntroPageEnter(page, done);
-    } else if (
-      routeTransitionsStore.to === ROUTES.HOME_PAGE &&
-      routeTransitionsStore.from === ROUTES.INTRO_PAGE
-    ) {
-      onHomePageEnterFromIntroPage(page, done);
+    switch (routeTransitionsStore.to) {
+      case ROUTES.INTRO_PAGE:
+        onIntroPageEnter(page, done);
+        break;
+      case ROUTES.HOME_PAGE:
+        onHomePageEnter(page, done);
+        break;
+      default:
+        done();
     }
   }
 
   function onPageLeave(page: Element, done: () => void) {
-    if (routeTransitionsStore.from === ROUTES.INTRO_PAGE) {
-      onIntroPageLeave(page, done);
-    } else {
-      done();
+    switch (routeTransitionsStore.from) {
+      case ROUTES.INTRO_PAGE:
+        onIntroPageLeave(page, done);
+        break;
+      case ROUTES.HOME_PAGE:
+        onHomePageLeave(page, done);
+        break;
+      default:
+        done();
     }
   }
 

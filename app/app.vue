@@ -11,6 +11,7 @@
   color: white;
   margin: 0;
   padding: 0;
+  transform-origin: top left;
 }
 
 html {
@@ -31,9 +32,11 @@ h6 {
 }
 
 .page-enter-from,
-.page-enter-active {
+.page-enter-active,
+.page-leave-active {
   position: fixed;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 </style>

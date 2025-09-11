@@ -44,7 +44,6 @@ main {
 }
 
 .hero {
-  transform-origin: top left;
   width: 230px;
   height: auto;
   margin-bottom: 20px;

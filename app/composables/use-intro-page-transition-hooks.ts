@@ -245,17 +245,19 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
   }
 
   function onIntroPageLeave(introPage: Element, done: () => void) {
-    const timeline = $gsap.timeline().paused(true);
-
     if (routeTransitionsStore.to === ROUTES.HOME_PAGE) {
-      hideHeading(introPage);
-      addTaglineLeaveAnimationToTimeline(introPage, timeline).then(() => {
-        timeline.play().then(() => done());
-      });
+      onIntroPageLeaveToHomePage(introPage, done);
     } else {
-      addFadeOutAnimationToTimeline(introPage, timeline);
-      timeline.play().then(() => done());
+      onIntroPageLeaveToAnyPage(introPage, done);
     }
+  }
+
+  function onIntroPageLeaveToHomePage(introPage: Element, done: () => void) {
+    const timeline = $gsap.timeline().paused(true);
+    hideHeading(introPage);
+    addTaglineLeaveAnimationToTimeline(introPage, timeline).then(() => {
+      timeline.play().then(() => done());
+    });
   }
 
   function hideHeading(introPage: Element) {
@@ -301,6 +303,12 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
       homePageHeadingContainer.getBoundingClientRect();
     const translateY = homePageHeadingContainerRect.y - taglineRect.y;
     return { translateY };
+  }
+
+  function onIntroPageLeaveToAnyPage(introPage: Element, done: () => void) {
+    const timeline = $gsap.timeline().paused(true);
+    addFadeOutAnimationToTimeline(introPage, timeline);
+    timeline.play().then(() => done());
   }
 
   return {

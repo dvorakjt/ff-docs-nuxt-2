@@ -149,7 +149,6 @@ a.router-link-active {
 
 .logo {
   margin-bottom: 12px;
-  transform-origin: top left;
 }
 
 .primary-navigation {

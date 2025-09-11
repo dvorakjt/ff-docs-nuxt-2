@@ -247,12 +247,8 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
   function onIntroPageLeave(introPage: Element, done: () => void) {
     const timeline = $gsap.timeline().paused(true);
 
-    if (shouldAnimateTaglineOnLeave()) {
-      // only hide the heading if it will be translated
-      const heading = introPage.querySelector(
-        "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
-      );
-      $gsap.set(heading, { visibility: "hidden" });
+    if (routeTransitionsStore.to === ROUTES.HOME_PAGE) {
+      hideHeading(introPage);
       addTaglineLeaveAnimationToTimeline(introPage, timeline).then(() => {
         timeline.play().then(() => done());
       });
@@ -262,10 +258,12 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
     }
   }
 
-  // scroll position for the other page may be remembered, so this should
-  // execute inside nextTick!
-  function shouldAnimateTaglineOnLeave() {
-    return routeTransitionsStore.to === ROUTES.HOME_PAGE;
+  function hideHeading(introPage: Element) {
+    const heading = introPage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING
+    );
+
+    $gsap.set(heading, { visibility: "hidden" });
   }
 
   function addTaglineLeaveAnimationToTimeline(

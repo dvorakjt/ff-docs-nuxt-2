@@ -1,16 +1,8 @@
 <template>
-  <Transition name="page" @before-leave="onBeforeLeave">
+  <Transition name="page">
     <NuxtPage />
   </Transition>
 </template>
-
-<script setup lang="ts">
-import { ANIMATED_ELEMENT_IDS } from "~/constants";
-
-function onBeforeLeave(el: Element) {
-  console.log(el.querySelector("#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING));
-}
-</script>
 
 <style scoped>
 .page-enter-from,

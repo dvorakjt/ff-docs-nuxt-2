@@ -1,5 +1,9 @@
 <template>
-  <Transition name="header">
+  <Transition
+    name="header"
+    @before-leave="onBeforeHeaderLeave"
+    @enter="onHeaderEnter"
+  >
     <header :style="headerStyles" v-if="showHeader">
       <div class="navbar-left">
         <NuxtLink to="/">
@@ -77,8 +81,14 @@ const logoStyles = {
   marginTop: PAGE_PADDING.TOP + "px",
 };
 
-const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
-const { showHeader } = storeToRefs(pageTransitionAnimationsStore);
+// const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
+// const { showHeader } = storeToRefs(pageTransitionAnimationsStore);
+const route = useRoute();
+const showHeader = computed(() => {
+  return route.path !== "/";
+});
+
+const { onBeforeHeaderLeave, onHeaderEnter } = useHeaderTransitionHooks();
 </script>
 
 <style scoped>

@@ -3,10 +3,10 @@ interface RouteTransitionStoreState {
   to: string | undefined;
 }
 
-export const useRouteTransitionStore = defineStore<
-  "routeTransitionStore",
+export const useRouteTransitionsStore = defineStore<
+  "routeTransitionsStore",
   RouteTransitionStoreState
->("routeTransitionStore", {
+>("routeTransitionsStore", {
   state: () => ({
     from: undefined,
     to: undefined,

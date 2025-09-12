@@ -67,19 +67,19 @@
 <script setup lang="ts">
 import {
   ROUTES,
-  PAGE_PADDING,
+  SPACING,
   ANIMATED_ELEMENT_IDS,
   COLLAPSED_LOGO_DIMENSIONS,
 } from "~/constants";
 
 const headerStyles = {
-  padding: `0 ${PAGE_PADDING.LEFT}px`,
+  padding: `0 ${SPACING.PAGE_PADDING_LEFT}px`,
 };
 
 const logoStyles = {
   width: COLLAPSED_LOGO_DIMENSIONS.WIDTH + "px",
   height: COLLAPSED_LOGO_DIMENSIONS.HEIGHT + "px",
-  marginTop: PAGE_PADDING.TOP + "px",
+  marginTop: SPACING.PAGE_PADDING_TOP + "px",
 };
 
 const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();

@@ -1,4 +1,5 @@
 <template>
+  <TheBackground />
   <TheHeader />
   <RouterOutlet />
   <NuxtRouteAnnouncer />

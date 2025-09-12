@@ -1,6 +1,7 @@
 import { ROUTES } from "~/constants";
 import { preserveScrollPosition } from "~/util/preserve-scroll-position";
 import { useGenericPageTransitionHooks } from "./use-generic-page-transition-hooks";
+import type { BackgroundMode } from "~/model";
 
 interface PageTransitionHooks {
   onBeforePageLeave: (page: Element) => void;
@@ -38,19 +39,24 @@ export function usePageTransitionHooks(): PageTransitionHooks {
     switch (routeTransitionsStore.to) {
       case ROUTES.INTRO_PAGE:
         onIntroPageEnter(page, done);
-        break;
+        setBackgroundMode("collapsed");
+        return;
       case ROUTES.HOME_PAGE:
         onHomePageEnter(page, done);
+        setBackgroundMode("expanded");
         break;
       default:
         onOtherPageEnter(page, done);
     }
+
+    setBackgroundMode("expanded");
   }
 
   function onPageLeave(page: Element, done: () => void) {
     switch (routeTransitionsStore.from) {
       case ROUTES.INTRO_PAGE:
         onIntroPageLeave(page, done);
+
         break;
       case ROUTES.HOME_PAGE:
         onHomePageLeave(page, done);
@@ -58,6 +64,10 @@ export function usePageTransitionHooks(): PageTransitionHooks {
       default:
         onOtherPageLeave(page, done);
     }
+  }
+
+  function setBackgroundMode(backgroundMode: BackgroundMode) {
+    pageTransitionAnimationsStore.backgroundMode = backgroundMode;
   }
 
   return {

@@ -128,8 +128,6 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
   }
 
   function onHomePageLeave(homePage: Element, done: () => void) {
-    hideHeading(homePage);
-
     if (shouldExecuteFullAnimationOnLeave()) {
       onHomePageLeaveWithFullAnimation(homePage, done);
     } else {
@@ -156,6 +154,7 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
     done: () => void
   ) {
     const timeline = $gsap.timeline().paused(true);
+    hideHeading(homePage);
     addFullLeaveAnimationToTimeline(homePage, timeline).then(() => {
       timeline.play().then(() => done());
     });

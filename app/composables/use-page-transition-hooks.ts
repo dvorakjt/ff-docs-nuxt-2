@@ -1,5 +1,6 @@
 import { ROUTES } from "~/constants";
 import { preserveScrollPosition } from "~/util/preserve-scroll-position";
+import { useGenericPageTransitionHooks } from "./use-generic-page-transition-hooks";
 
 interface PageTransitionHooks {
   onBeforePageLeave: (page: Element) => void;
@@ -16,6 +17,9 @@ export function usePageTransitionHooks(): PageTransitionHooks {
 
   const { onBeforeHomePageLeave, onHomePageEnter, onHomePageLeave } =
     useHomePageTransitionHooks();
+
+  const { onPageEnter: onOtherPageEnter, onPageLeave: onOtherPageLeave } =
+    useGenericPageTransitionHooks();
 
   function onBeforePageLeave(page: Element) {
     preserveScrollPosition(page as HTMLElement);
@@ -39,7 +43,7 @@ export function usePageTransitionHooks(): PageTransitionHooks {
         onHomePageEnter(page, done);
         break;
       default:
-        done();
+        onOtherPageEnter(page, done);
     }
   }
 
@@ -52,7 +56,7 @@ export function usePageTransitionHooks(): PageTransitionHooks {
         onHomePageLeave(page, done);
         break;
       default:
-        done();
+        onOtherPageLeave(page, done);
     }
   }
 

@@ -7,6 +7,7 @@ import {
   addFadeInAnimationToTimeline,
   addFadeOutAnimationToTimeline,
 } from "~/util";
+import { preserveScrollPosition } from "~/util/preserve-scroll-position";
 import { touchElementsExceptExcludedElementsAndTheirAncestors } from "~/util/touch-elements-except-excluded-elements-and-their-ancestors";
 
 interface HomePageTransitionHooks {
@@ -127,18 +128,37 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
   }
 
   function onHomePageLeave(homePage: Element, done: () => void) {
-    if (routeTransitionsStore.to === ROUTES.INTRO_PAGE) {
-      onHomePageLeaveToIntroPage(homePage, done);
+    hideHeading(homePage);
+
+    if (shouldExecuteFullAnimationOnLeave()) {
+      onHomePageLeaveWithFullAnimation(homePage, done);
     } else {
-      onHomePageLeaveToAnyPage(homePage, done);
+      onHomePageLeaveWithFadeOnly(homePage, done);
     }
   }
 
-  function onHomePageLeaveToIntroPage(homePage: Element, done: () => void) {
+  function shouldExecuteFullAnimationOnLeave() {
+    if (routeTransitionsStore.to === ROUTES.INTRO_PAGE) {
+      const headingRect =
+        pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
+
+      const isHeadingVisible =
+        headingRect.bottom > 0 && headingRect.top < window.innerHeight;
+
+      return isHeadingVisible;
+    }
+
+    return false;
+  }
+
+  function onHomePageLeaveWithFullAnimation(
+    homePage: Element,
+    done: () => void
+  ) {
     const timeline = $gsap.timeline().paused(true);
-    hideHeading(homePage);
-    addTaglineContainerAnimationToTimeline(homePage, timeline);
-    timeline.play().then(() => done());
+    addFullLeaveAnimationToTimeline(homePage, timeline).then(() => {
+      timeline.play().then(() => done());
+    });
   }
 
   function hideHeading(homePage: Element) {
@@ -149,32 +169,38 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
     $gsap.set(heading, { visibility: "hidden" });
   }
 
-  function addTaglineContainerAnimationToTimeline(
+  function addFullLeaveAnimationToTimeline(
     homePage: Element,
     timeline: GSAPTimeline
-  ) {
-    const taglineContainer = homePage.querySelector(
-      "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.TAGLINE_CONTAINER
-    )!;
-    const { translateY } = calculateTaglineContainerLeaveTo(taglineContainer);
-
-    timeline.to(taglineContainer, {
-      opacity: 0,
-      translateY,
-      duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
-        unit: "seconds",
-      }),
-      ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+  ): Promise<void> {
+    return nextTick(() => {
+      const { translateY } = calculatePageLeaveTo(homePage);
+      timeline.to(homePage, {
+        translateY,
+        opacity: 0,
+        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+          unit: "seconds",
+        }),
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+      });
     });
   }
 
-  function calculateTaglineContainerLeaveTo(taglineContainer: Element) {
-    const taglineContainerRect = taglineContainer.getBoundingClientRect();
-    const translateY = window.innerHeight - taglineContainerRect.y;
+  function calculatePageLeaveTo(homePage: Element) {
+    const homePageHeading = homePage.querySelector(
+      "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING
+    )!;
+    const homePageHeadingRect = homePageHeading.getBoundingClientRect();
+    const introHeadingContainer = document.getElementById(
+      ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING_CONTAINER
+    )!;
+    const introHeadingRect = introHeadingContainer.getBoundingClientRect();
+
+    const translateY = introHeadingRect.y - homePageHeadingRect.y;
     return { translateY };
   }
 
-  function onHomePageLeaveToAnyPage(homePage: Element, done: () => void) {
+  function onHomePageLeaveWithFadeOnly(homePage: Element, done: () => void) {
     const timeline = $gsap.timeline().paused(true);
     addFadeOutAnimationToTimeline(homePage, timeline);
     timeline.play().then(() => done());

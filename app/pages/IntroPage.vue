@@ -8,9 +8,11 @@
         alt="Fully Formed logo"
       />
     </div>
-    <h1 :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING" class="heading">
-      Fully Formed
-    </h1>
+    <div :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING_CONTAINER">
+      <h1 :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HEADING" class="heading">
+        Fully Formed
+      </h1>
+    </div>
     <p :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.TAGLINE" class="tagline">
       Flawless forms,
       <NuxtLink :to="ROUTES.HOME_PAGE">just add water.</NuxtLink>

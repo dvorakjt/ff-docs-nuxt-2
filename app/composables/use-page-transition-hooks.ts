@@ -1,4 +1,5 @@
 import { ROUTES } from "~/constants";
+import { preserveScrollPosition } from "~/util/preserve-scroll-position";
 
 interface PageTransitionHooks {
   onBeforePageLeave: (page: Element) => void;
@@ -17,6 +18,8 @@ export function usePageTransitionHooks(): PageTransitionHooks {
     useHomePageTransitionHooks();
 
   function onBeforePageLeave(page: Element) {
+    preserveScrollPosition(page as HTMLElement);
+
     pageTransitionAnimationsStore.showHeader =
       routeTransitionsStore.to !== ROUTES.INTRO_PAGE;
 

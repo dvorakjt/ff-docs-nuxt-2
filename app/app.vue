@@ -30,13 +30,4 @@ h5,
 h6 {
   font-family: "Monomaniac One";
 }
-
-.page-enter-from,
-.page-enter-active,
-.page-leave-active {
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-}
 </style>

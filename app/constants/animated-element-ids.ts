@@ -9,6 +9,7 @@ export const ANIMATED_ELEMENT_IDS = <const>{
     HERO: "intro-page-hero",
     HERO_CONTAINER: "intro-page-hero-container",
     HEADING: "intro-page-heading",
+    HEADING_CONTAINER: "intro-page-heading-container",
     TAGLINE: "intro-page-tagline",
   },
   HOME_PAGE: {

@@ -8,7 +8,7 @@ import {
   addFadeOutAnimationToTimeline,
 } from "~/util";
 import { preserveScrollPosition } from "~/util/preserve-scroll-position";
-import { touchElementsExceptExcludedElementsAndTheirAncestors } from "~/util/touch-elements-except-excluded-elements-and-their-ancestors";
+import { selectivelyVisitNodes } from "~/util/selectively-visit-nodes";
 
 interface HomePageTransitionHooks {
   onBeforeHomePageLeave: (homePage: Element) => void;
@@ -85,24 +85,20 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
       );
     });
 
-    touchElementsExceptExcludedElementsAndTheirAncestors(
-      homePage,
-      [heading],
-      (el) => {
-        $gsap.set(el, { opacity: 0 });
+    selectivelyVisitNodes(homePage, [heading], (el) => {
+      $gsap.set(el, { opacity: 0 });
 
-        timeline.to(
-          el,
-          {
-            opacity: 1,
-            duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
-              unit: "seconds",
-            }),
-          },
-          0
-        );
-      }
-    );
+      timeline.to(
+        el,
+        {
+          opacity: 1,
+          duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+            unit: "seconds",
+          }),
+        },
+        0
+      );
+    });
   }
 
   function calculateInvertedElementsState(homePage: Element) {

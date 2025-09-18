@@ -14,7 +14,12 @@ const { onBeforePageLeave, onPageEnter, onPageLeave } =
   usePageTransitionHooks();
 </script>
 
-<style scoped>
+<style>
+body:has(.page-enter-active) {
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 .page-enter-from,
 .page-enter-active {
   position: fixed;

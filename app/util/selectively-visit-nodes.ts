@@ -1,4 +1,4 @@
-export function touchElementsExceptExcludedElementsAndTheirAncestors(
+export function selectivelyVisitNodes(
   rootElement: Element,
   elementsToExclude: Element[],
   cb: (element: Element) => void

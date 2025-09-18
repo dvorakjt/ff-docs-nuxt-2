@@ -43,10 +43,10 @@ export function usePageTransitionHooks(): PageTransitionHooks {
         return;
       case ROUTES.HOME_PAGE:
         onHomePageEnter(page, done);
-        setBackgroundMode("expanded");
         break;
       default:
         onOtherPageEnter(page, done);
+        break;
     }
 
     setBackgroundMode("expanded");
@@ -56,13 +56,13 @@ export function usePageTransitionHooks(): PageTransitionHooks {
     switch (routeTransitionsStore.from) {
       case ROUTES.INTRO_PAGE:
         onIntroPageLeave(page, done);
-
         break;
       case ROUTES.HOME_PAGE:
         onHomePageLeave(page, done);
         break;
       default:
         onOtherPageLeave(page, done);
+        break;
     }
   }
 

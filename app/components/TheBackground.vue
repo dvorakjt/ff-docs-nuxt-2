@@ -60,6 +60,7 @@ const totalDuration = PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
 const percentOfTotalDuration = rateMS / totalDuration;
 
 function resetAnimation() {
+  // might not be needed
   if (interval) {
     clearInterval(interval);
   }
@@ -123,7 +124,7 @@ function paintCanvas() {
   const numColumns = calculateBackgroundColumnCount();
 
   for (let column = 0; column < numColumns; column++) {
-    const numRows = calculateBackgroundRowCount(column);
+    const numRows = calculateBackgroundRowCount(column); //
 
     for (let row = 0; row < numRows; row++) {
       // skip the very first row and column

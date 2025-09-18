@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { Temporal } from "@js-temporal/polyfill";
 import {
   ANIMATED_ELEMENT_IDS,
   COLLAPSED_LOGO_DIMENSIONS,
@@ -120,36 +119,54 @@ function paintCanvas() {
     return;
   }
 
-  const { width, height } = calculateLogoSize();
+  let width: number, height: number, heroRect: DOMRect;
+
+  if (shouldPaintStaticBackground()) {
+    width = COLLAPSED_LOGO_DIMENSIONS.WIDTH;
+    height = COLLAPSED_LOGO_DIMENSIONS.HEIGHT;
+  } else {
+    heroRect = getHeroRect();
+    const logoSize = calculateLogoSize(heroRect);
+    width = logoSize.width;
+    height = logoSize.height;
+  }
+
+  const logo = getLogoElement();
+  const context = canvasRef.value!.getContext("2d")!;
   const numColumns = calculateBackgroundColumnCount();
+  const numRows = calculateBackgroundRowCount();
 
   for (let column = 0; column < numColumns; column++) {
-    const numRows = calculateBackgroundRowCount(column); //
+    const adjustedNumRows = (column & 1) === 1 ? numRows - 1 : numRows;
 
-    for (let row = 0; row < numRows; row++) {
-      // skip the very first row and column
+    for (let row = 0; row < adjustedNumRows; row++) {
       if (row === 0 && column === 0) {
         continue;
       }
 
-      const { x, y } = calculateLogoPosition(row, column);
+      let x: number, y: number;
 
-      drawLogo(x, y, width, height);
+      if (shouldPaintStaticBackground()) {
+        const logoPosition = calculateStaticLogoPosition(row, column);
+        x = logoPosition.x;
+        y = logoPosition.y;
+      } else {
+        const logoPosition = calculateAdjustedLogoPosition(
+          row,
+          column,
+          heroRect!
+        );
+        x = logoPosition.x;
+        y = logoPosition.y;
+      }
+
+      drawLogo(logo, context, x, y, width, height);
     }
   }
 }
 
-function calculateLogoSize() {
+function calculateLogoSize(heroRect: DOMRect) {
   const mode = pageTransitionAnimationsStore.backgroundMode;
-
-  if (shouldPaintStaticBackground()) {
-    return {
-      width: COLLAPSED_LOGO_DIMENSIONS.WIDTH,
-      height: COLLAPSED_LOGO_DIMENSIONS.HEIGHT,
-    };
-  }
-
-  const heroRect = getHeroRect();
 
   let width: number, height: number;
 
@@ -171,6 +188,10 @@ function calculateLogoSize() {
       (heroRect.height - COLLAPSED_LOGO_DIMENSIONS.HEIGHT) * progress;
   }
 
+  // round for better performance (prevent sub-pixel rendering)
+  width = Math.round(width);
+  height = Math.round(height);
+
   return {
     width,
     height,
@@ -182,6 +203,10 @@ function shouldPaintStaticBackground() {
   return mode === "expanded" && progress >= 1;
 }
 
+function getLogoElement() {
+  return logoRef.value!.$el;
+}
+
 function calculateBackgroundColumnCount() {
   const canvas = canvasRef.value!;
   const numColumns = Math.ceil(
@@ -191,22 +216,13 @@ function calculateBackgroundColumnCount() {
   return numColumns;
 }
 
-function calculateBackgroundRowCount(column: number) {
+function calculateBackgroundRowCount() {
   const canvas = canvasRef.value!;
   let numRows = Math.ceil(
     canvas.height /
       (COLLAPSED_LOGO_DIMENSIONS.HEIGHT + SPACING.BACKGROUND_IMAGE_GUTTER_Y)
   );
-  numRows = column % 2 === 1 ? numRows - 1 : numRows;
   return numRows;
-}
-
-function calculateLogoPosition(row: number, column: number) {
-  if (shouldPaintStaticBackground()) {
-    return calculateStaticLogoPosition(row, column);
-  }
-
-  return calculateAdjustedLogoPosition(row, column);
 }
 
 function calculateStaticLogoPosition(row: number, column: number) {
@@ -225,16 +241,19 @@ function calculateStaticLogoPosition(row: number, column: number) {
         )
       : 0);
 
-  // round for better performance
+  // round for better performance (prevent sub-pixel rendering)
   x = Math.round(x);
   y = Math.round(y);
 
   return { x, y };
 }
 
-function calculateAdjustedLogoPosition(row: number, column: number) {
+function calculateAdjustedLogoPosition(
+  row: number,
+  column: number,
+  heroRect: DOMRect
+) {
   const mode = pageTransitionAnimationsStore.backgroundMode;
-  const heroRect = getHeroRect();
   let { x, y } = calculateStaticLogoPosition(row, column);
 
   if (mode === "collapsed") {
@@ -247,7 +266,7 @@ function calculateAdjustedLogoPosition(row: number, column: number) {
     y = heroRect.y - (heroRect.y - y) * progress;
   }
 
-  // round for better performance
+  // round for better performance (prevent sub-pixel rendering)
   x = Math.round(x);
   y = Math.round(y);
 
@@ -268,11 +287,15 @@ function getHeroRect() {
   return lastKnownHeroRect;
 }
 
-function drawLogo(x: number, y: number, width: number, height: number) {
-  const canvas = canvasRef.value!;
-  const context = canvas.getContext("2d")!;
-  const logo = logoRef.value!;
-  context.drawImage(logo.$el, x, y, width, height);
+function drawLogo(
+  logo: HTMLImageElement,
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+) {
+  context.drawImage(logo, x, y, width, height);
 }
 </script>
 

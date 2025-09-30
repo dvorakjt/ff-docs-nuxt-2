@@ -9,5 +9,5 @@ interface PageTransitionAnimationProperties {
 export const PAGE_TRANSITION_ANIMATION_PROPERTIES: PageTransitionAnimationProperties =
   <const>{
     DURATION: Temporal.Duration.from({ milliseconds: 500 }),
-    EASE_FUNCTION: "power1.inOut",
+    EASE_FUNCTION: "sine.in",
   };

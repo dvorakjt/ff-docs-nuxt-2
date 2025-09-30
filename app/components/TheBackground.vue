@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", resizeCanvasAndDrawBackground);
 });
 
-const rateMS = 20;
+const rateMS = 10;
 
 const totalDuration = PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
   unit: "milliseconds",

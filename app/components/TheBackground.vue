@@ -16,7 +16,11 @@ import {
   PAGE_TRANSITION_ANIMATION_PROPERTIES,
 } from "~/constants";
 
+const { $gsap } = useNuxtApp();
 const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
+const ease = $gsap.parseEase(
+  PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION!
+);
 let progress = 1;
 let interval: ReturnType<typeof setInterval> | null = null;
 
@@ -108,7 +112,9 @@ function calculateOpacity() {
   const mode = pageTransitionAnimationsStore.backgroundMode;
 
   const opacity =
-    mode === "collapsed" ? 0.3 + 0.7 * progress : 1 - 0.7 * progress;
+    mode === "collapsed"
+      ? 0.3 + 0.7 * ease(progress)
+      : 1 - 0.7 * ease(progress);
 
   return opacity;
 }
@@ -173,19 +179,19 @@ function calculateLogoSize(heroRect: Omit<DOMRect, "toJSON">) {
   if (mode === "collapsed") {
     width =
       COLLAPSED_LOGO_DIMENSIONS.WIDTH +
-      (heroRect.width - COLLAPSED_LOGO_DIMENSIONS.WIDTH) * progress;
+      (heroRect.width - COLLAPSED_LOGO_DIMENSIONS.WIDTH) * ease(progress);
 
     height =
       COLLAPSED_LOGO_DIMENSIONS.HEIGHT +
-      (heroRect.height - COLLAPSED_LOGO_DIMENSIONS.HEIGHT) * progress;
+      (heroRect.height - COLLAPSED_LOGO_DIMENSIONS.HEIGHT) * ease(progress);
   } else {
     width =
       heroRect.width -
-      (heroRect.width - COLLAPSED_LOGO_DIMENSIONS.WIDTH) * progress;
+      (heroRect.width - COLLAPSED_LOGO_DIMENSIONS.WIDTH) * ease(progress);
 
     height =
       heroRect.height -
-      (heroRect.height - COLLAPSED_LOGO_DIMENSIONS.HEIGHT) * progress;
+      (heroRect.height - COLLAPSED_LOGO_DIMENSIONS.HEIGHT) * ease(progress);
   }
 
   // round for better performance (prevent sub-pixel rendering)
@@ -257,13 +263,13 @@ function calculateAdjustedLogoPosition(
   let { x, y } = calculateStaticLogoPosition(row, column);
 
   if (mode === "collapsed") {
-    x = x + (heroRect.x - x) * progress;
+    x = x + (heroRect.x - x) * ease(progress);
 
-    y = y + (heroRect.y - y) * progress;
+    y = y + (heroRect.y - y) * ease(progress);
   } else {
-    x = heroRect.x - (heroRect.x - x) * progress;
+    x = heroRect.x - (heroRect.x - x) * ease(progress);
 
-    y = heroRect.y - (heroRect.y - y) * progress;
+    y = heroRect.y - (heroRect.y - y) * ease(progress);
   }
 
   // round for better performance (prevent sub-pixel rendering)

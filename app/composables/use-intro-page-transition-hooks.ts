@@ -87,6 +87,8 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
     const { translateX, translateY, scaleX, scaleY } =
       calculateInvertedHeroState(hero);
 
+    console.log(translateX, translateY, scaleX, scaleY);
+
     $gsap.set(hero, {
       x: translateX,
       y: translateY,

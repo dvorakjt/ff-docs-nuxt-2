@@ -119,13 +119,13 @@ function paintCanvas() {
     return;
   }
 
-  let width: number, height: number, heroRect: DOMRect;
+  let width: number, height: number, heroRect: Omit<DOMRect, "toJSON">;
 
   if (shouldPaintStaticBackground()) {
     width = COLLAPSED_LOGO_DIMENSIONS.WIDTH;
     height = COLLAPSED_LOGO_DIMENSIONS.HEIGHT;
   } else {
-    heroRect = getHeroRect();
+    heroRect = getAdjustedHeroRect();
     const logoSize = calculateLogoSize(heroRect);
     width = logoSize.width;
     height = logoSize.height;
@@ -165,7 +165,7 @@ function paintCanvas() {
   }
 }
 
-function calculateLogoSize(heroRect: DOMRect) {
+function calculateLogoSize(heroRect: Omit<DOMRect, "toJSON">) {
   const mode = pageTransitionAnimationsStore.backgroundMode;
 
   let width: number, height: number;
@@ -251,7 +251,7 @@ function calculateStaticLogoPosition(row: number, column: number) {
 function calculateAdjustedLogoPosition(
   row: number,
   column: number,
-  heroRect: DOMRect
+  heroRect: Omit<DOMRect, "toJSON">
 ) {
   const mode = pageTransitionAnimationsStore.backgroundMode;
   let { x, y } = calculateStaticLogoPosition(row, column);
@@ -273,18 +273,37 @@ function calculateAdjustedLogoPosition(
   return { x, y };
 }
 
-function getHeroRect() {
+// adjusts the hero rect for the fact that the canvas is slightly smaller
+// than the screen
+function getAdjustedHeroRect() {
   const mode = pageTransitionAnimationsStore.backgroundMode;
+  let heroRect: DOMRect;
+
   if (mode === "collapsed") {
     const hero = document.getElementById(
       ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO_CONTAINER
     )!;
-    return hero.getBoundingClientRect();
+
+    heroRect = hero.getBoundingClientRect().toJSON();
+  } else {
+    const lastKnownHeroRect =
+      pageTransitionAnimationsStore.lastKnownElementRects.introPage.hero!;
+
+    heroRect = lastKnownHeroRect.toJSON();
   }
 
-  const lastKnownHeroRect =
-    pageTransitionAnimationsStore.lastKnownElementRects.introPage.hero!;
-  return lastKnownHeroRect;
+  const adjustedHeroRect = {
+    x: heroRect.x - SPACING.PAGE_PADDING_LEFT,
+    y: heroRect.y - SPACING.PAGE_PADDING_TOP,
+    left: heroRect.left - SPACING.PAGE_PADDING_LEFT,
+    right: heroRect.right - SPACING.PAGE_PADDING_LEFT,
+    top: heroRect.top - SPACING.PAGE_PADDING_TOP,
+    bottom: heroRect.bottom - SPACING.PAGE_PADDING_TOP,
+    width: heroRect.width,
+    height: heroRect.height,
+  };
+
+  return adjustedHeroRect;
 }
 
 function drawLogo(

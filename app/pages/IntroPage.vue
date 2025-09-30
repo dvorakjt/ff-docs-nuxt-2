@@ -1,7 +1,10 @@
 <template>
   <main>
-    <div :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO_CONTAINER">
-      <NuxtImg
+    <div
+      :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO_CONTAINER"
+      class="hero-container"
+    >
+      <img
         :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.HERO"
         class="hero"
         src="/images/ff-logo.svg"
@@ -45,10 +48,13 @@ main {
   z-index: 2;
 }
 
+.hero-container {
+  margin-bottom: 20px;
+}
+
 .hero {
   width: 230px;
-  height: auto;
-  margin-bottom: 20px;
+  height: 195px;
 }
 
 .heading {
@@ -74,7 +80,7 @@ main {
 @media screen and (min-width: 344px) {
   .hero {
     width: 260px;
-    height: auto;
+    height: 200px;
   }
 
   .heading {
@@ -85,7 +91,7 @@ main {
 @media screen and (min-width: 360px) {
   .hero {
     width: 280px;
-    height: auto;
+    height: 237px;
   }
 
   .heading {
@@ -96,7 +102,7 @@ main {
 @media screen and (min-width: 390px) {
   .hero {
     width: 300px;
-    height: auto;
+    height: 254px;
   }
 
   .heading {
@@ -107,7 +113,7 @@ main {
 @media screen and (min-width: 428px) {
   .hero {
     width: 340px;
-    height: auto;
+    height: 289px;
   }
 
   .heading {
@@ -122,7 +128,7 @@ main {
 @media screen and (min-width: 540px) {
   .hero {
     width: 350px;
-    height: auto;
+    height: 294px;
   }
 
   .heading {
@@ -137,7 +143,7 @@ main {
 @media screen and (min-width: 700px) {
   .hero {
     width: 460px;
-    height: auto;
+    height: 387px;
   }
 
   .heading {
@@ -148,7 +154,7 @@ main {
 @media screen and (min-width: 744px) {
   .hero {
     width: 500px;
-    height: auto;
+    height: 421px;
   }
 
   .heading {
@@ -159,7 +165,7 @@ main {
 @media screen and (min-width: 768px) {
   .hero {
     width: 530px;
-    height: auto;
+    height: 447px;
   }
 
   .heading {
@@ -174,7 +180,7 @@ main {
 @media screen and (min-width: 834px) {
   .hero {
     width: 600px;
-    height: auto;
+    height: 505px;
   }
 
   .heading {
@@ -185,7 +191,7 @@ main {
 @media screen and (min-width: 912px) {
   .hero {
     width: 670px;
-    height: auto;
+    height: 563px;
   }
 
   .heading {
@@ -196,7 +202,7 @@ main {
 @media screen and (min-width: 1024px) {
   .hero {
     width: 780px;
-    height: auto;
+    height: 656px;
   }
 
   .heading {
@@ -205,10 +211,13 @@ main {
 }
 
 @media screen and (orientation: landscape) {
+  .hero-container {
+    margin-bottom: 10px;
+  }
+
   .hero {
     width: 200px;
-    height: auto;
-    margin-bottom: 10px;
+    height: 169px;
   }
 
   .heading {
@@ -224,7 +233,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 375px) {
   .hero {
     width: 250px;
-    height: auto;
+    height: 212px;
   }
 
   .heading {
@@ -235,7 +244,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 402px) {
   .hero {
     width: 255px;
-    height: auto;
+    height: 216px;
   }
 
   .heading {
@@ -246,7 +255,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 428) {
   .hero {
     width: 260px;
-    height: auto;
+    height: 220px;
   }
 
   .heading {
@@ -257,7 +266,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 430) {
   .hero {
     width: 265px;
-    height: auto;
+    height: 225px;
   }
 
   .heading {
@@ -268,15 +277,18 @@ main {
 @media screen and (orientation: landscape) and (min-height: 440) {
   .hero {
     width: 270px;
-    height: auto;
+    height: 229px;
   }
 }
 
 @media screen and (orientation: landscape) and (min-height: 540) {
+  .hero-container {
+    margin-bottom: 20px;
+  }
+
   .hero {
     width: 300px;
-    height: auto;
-    margin-bottom: 20px;
+    height: 254px;
   }
 
   .heading {
@@ -291,10 +303,13 @@ main {
 }
 
 @media screen and (orientation: landscape) and (min-height: 700px) {
+  .hero-container {
+    margin-bottom: 30px;
+  }
+
   .hero {
     width: 450px;
-    height: auto;
-    margin-bottom: 30px;
+    height: 380px;
   }
 
   .heading {
@@ -310,7 +325,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 768px) {
   .hero {
     width: 500px;
-    height: auto;
+    height: 422px;
   }
 
   .heading {
@@ -321,7 +336,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 834px) {
   .hero {
     width: 550px;
-    height: auto;
+    height: 464px;
   }
 
   .heading {
@@ -332,7 +347,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 912px) {
   .hero {
     width: 600px;
-    height: auto;
+    height: 506px;
   }
 
   .heading {
@@ -343,6 +358,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 1080px) {
   .hero {
     width: 650px;
+    height: 548px;
   }
 
   .heading {
@@ -357,7 +373,7 @@ main {
 @media screen and (orientation: landscape) and (min-height: 1080px) and (min-width: 1920px) {
   .hero {
     width: 700px;
-    height: auto;
+    height: 590px;
   }
 
   .heading {

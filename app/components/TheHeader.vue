@@ -85,31 +85,11 @@ const logoStyles = {
 const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
 const { showHeader } = storeToRefs(pageTransitionAnimationsStore);
 
-const { onBeforeHeaderLeave, onHeaderEnter } = useHeaderTransitionHooks();
+const { onHeaderEnter, onBeforeHeaderLeave, onHeaderLeave } =
+  useHeaderTransitionHooks();
 </script>
 
 <style scoped>
-@keyframes slide-down {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.header-enter-active {
-  animation: 0.4s linear 1 forwards slide-down;
-}
-
-.header-leave-active {
-  animation: 0.4s linear reverse 1 forwards slide-down;
-}
-
-.header-leave-active .logo {
-  visibility: hidden;
-}
-
 header {
   position: fixed;
   top: 0;

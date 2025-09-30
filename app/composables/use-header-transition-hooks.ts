@@ -6,6 +6,7 @@ import {
 interface HeaderTransitionHooks {
   onBeforeHeaderLeave: (header: Element) => void;
   onHeaderEnter: (header: Element, done: () => void) => void;
+  onHeaderLeave: (header: Element, done: () => void) => void;
 }
 
 export function useHeaderTransitionHooks(): HeaderTransitionHooks {
@@ -25,8 +26,30 @@ export function useHeaderTransitionHooks(): HeaderTransitionHooks {
   function onHeaderEnter(header: Element, done: () => void) {
     const logo = header.querySelector("#" + ANIMATED_ELEMENT_IDS.HEADER.LOGO)!;
     const timeline = $gsap.timeline().paused(true);
+    addHeaderEnterAnimationToTimeline(header, timeline);
     addLogoAnimationToTimeline(logo, timeline);
     timeline.play().then(() => done());
+  }
+
+  function addHeaderEnterAnimationToTimeline(
+    header: Element,
+    timeline: GSAPTimeline
+  ) {
+    $gsap.set(header, {
+      y: "-100%",
+    });
+
+    timeline.to(
+      header,
+      {
+        y: 0,
+        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+          unit: "seconds",
+        }),
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+      },
+      0
+    );
   }
 
   function addLogoAnimationToTimeline(logo: Element, timeLine: GSAPTimeline) {
@@ -69,8 +92,34 @@ export function useHeaderTransitionHooks(): HeaderTransitionHooks {
     };
   }
 
+  function onHeaderLeave(header: Element, done: () => void) {
+    const logo = header.querySelector("#" + ANIMATED_ELEMENT_IDS.HEADER.LOGO)!;
+    $gsap.set(logo, { visibility: "hidden" });
+    const timeline = $gsap.timeline().paused(true);
+    addHeaderLeaveAnimationToTimeline(header, timeline);
+    timeline.play().then(() => done());
+  }
+
+  function addHeaderLeaveAnimationToTimeline(
+    header: Element,
+    timeline: GSAPTimeline
+  ) {
+    timeline.to(
+      header,
+      {
+        y: "-100%",
+        duration: PAGE_TRANSITION_ANIMATION_PROPERTIES.DURATION.total({
+          unit: "seconds",
+        }),
+        ease: PAGE_TRANSITION_ANIMATION_PROPERTIES.EASE_FUNCTION,
+      },
+      0
+    );
+  }
+
   return {
     onBeforeHeaderLeave,
     onHeaderEnter,
+    onHeaderLeave,
   };
 }

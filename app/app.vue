@@ -21,6 +21,8 @@ html {
 
 body {
   background-color: black;
+  margin: 0;
+  padding: 0;
 }
 
 h1,

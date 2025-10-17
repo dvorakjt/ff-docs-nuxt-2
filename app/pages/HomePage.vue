@@ -20,6 +20,65 @@
         </div>
       </div>
     </section>
+    <section>
+      <h2>Fully Formed Is</h2>
+      <div>
+        <h3>Fully Type-Safe</h3>
+        <div>
+          <p>
+            Forms are aware of the names of their fields and the types of values
+            each of those fields hold. Forms use this information to construct a
+            type representing their own value, making it possible to verify that
+            the structure of the data collected by the form matches what is
+            expected by the backend.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3>Always Atomic</h3>
+        <div>
+          <p>
+            The value and validity of each field are always set simultaneously,
+            and the value and validity of the form is derived from those of its
+            fields.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3>Defined Declaratively</h3>
+        <div>
+          <p>
+            Declarative syntax improves code readability and makes complex forms
+            easier to implement. And, because the logic required for form state
+            management is all taken care of by Fully Formed, components can
+            focus solely on presenting and stylizing form controls.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3>Powerful and Flexible</h3>
+        <div>
+          <p>
+            Fully Formed allows you to easily implement any kind of form that
+            you can imagine: One field can control another, fields can be
+            grouped together and validated as a unit, the values of fields can
+            be transformed or omitted, forms can be nested within other forms,
+            and much more.
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3>Headless and Composable</h3>
+        <div>
+          <p>
+            In addition to providing the tools to structure your form data and
+            define what makes it valid, Fully Formed provides numerous custom
+            hooks that allow components to react to the state of your form,
+            opening up endless possibilities in terms of visual design.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 

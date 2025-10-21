@@ -20,6 +20,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@hypernym/nuxt-gsap": "^2.4.3"
+    "@hypernym/nuxt-gsap": "^2.4.3",
+    "sass": "^1.93.2"
   }
 }

@@ -1,0 +1,28 @@
+@use './colors' as *;
+@use './fonts' as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transform-origin: top left;
+  font-family: $font-family-roboto-flex;
+  color: $color-white;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: $color-black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-monomaniac-one;
+}

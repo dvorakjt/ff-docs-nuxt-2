@@ -4,14 +4,6 @@
   </main>
 </template>
 
-<script setup lang="ts">
-import { ROUTES } from "~/constants";
-
-definePageMeta({
-  path: ROUTES.DOCS_PAGE,
-});
-</script>
-
 <style scoped>
 main {
   min-width: 100vw;

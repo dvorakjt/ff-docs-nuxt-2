@@ -3,10 +3,11 @@
     name="header"
     @before-leave="onBeforeHeaderLeave"
     @enter="onHeaderEnter"
+    @leave="onHeaderLeave"
   >
     <header :style="headerStyles" v-if="showHeader">
       <div class="navbar-left">
-        <NuxtLink :to="ROUTES.INTRO_PAGE">
+        <NuxtLink to="/">
           <NuxtImg
             :id="ANIMATED_ELEMENT_IDS.HEADER.LOGO"
             src="/images/ff-logo.svg"
@@ -18,10 +19,10 @@
         <nav class="primary-navigation animated">
           <ul>
             <li>
-              <NuxtLink :to="ROUTES.HOME_PAGE">Home</NuxtLink>
+              <NuxtLink to="/home">Home</NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="ROUTES.DOCS_PAGE">Docs</NuxtLink>
+              <NuxtLink to="/docs">Docs</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/apireference">API Reference</NuxtLink>
@@ -66,7 +67,6 @@
 
 <script setup lang="ts">
 import {
-  ROUTES,
   SPACING,
   ANIMATED_ELEMENT_IDS,
   COLLAPSED_LOGO_DIMENSIONS,

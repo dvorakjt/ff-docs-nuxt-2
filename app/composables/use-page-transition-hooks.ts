@@ -1,4 +1,4 @@
-import { ROUTES } from "~/constants";
+import { Routes} from "~/generated/routes";
 import { preserveScrollPosition } from "~/util/preserve-scroll-position";
 import { useGenericPageTransitionHooks } from "./use-generic-page-transition-hooks";
 import type { BackgroundMode } from "~/model";
@@ -26,22 +26,22 @@ export function usePageTransitionHooks(): PageTransitionHooks {
     preserveScrollPosition(page as HTMLElement);
 
     pageTransitionAnimationsStore.showHeader =
-      routeTransitionsStore.to !== ROUTES.INTRO_PAGE;
+      routeTransitionsStore.to !== Routes.Index;
 
-    if (routeTransitionsStore.from === ROUTES.INTRO_PAGE) {
+    if (routeTransitionsStore.from === Routes.Index) {
       onBeforeIntroPageLeave(page);
-    } else if (routeTransitionsStore.from === ROUTES.HOME_PAGE) {
+    } else if (routeTransitionsStore.from === Routes.Home) {
       onBeforeHomePageLeave(page);
     }
   }
 
   function onPageEnter(page: Element, done: () => void) {
     switch (routeTransitionsStore.to) {
-      case ROUTES.INTRO_PAGE:
+      case Routes.Index:
         onIntroPageEnter(page, done);
         setBackgroundMode("collapsed");
         return;
-      case ROUTES.HOME_PAGE:
+      case Routes.Home:
         onHomePageEnter(page, done);
         break;
       default:
@@ -54,10 +54,10 @@ export function usePageTransitionHooks(): PageTransitionHooks {
 
   function onPageLeave(page: Element, done: () => void) {
     switch (routeTransitionsStore.from) {
-      case ROUTES.INTRO_PAGE:
+      case Routes.Index:
         onIntroPageLeave(page, done);
         break;
-      case ROUTES.HOME_PAGE:
+      case Routes.Home:
         onHomePageLeave(page, done);
         break;
       default:

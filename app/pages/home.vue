@@ -83,11 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ROUTES, ANIMATED_ELEMENT_IDS } from "~/constants";
-
-definePageMeta({
-  path: ROUTES.HOME_PAGE,
-});
+import { ANIMATED_ELEMENT_IDS } from "~/constants";
 </script>
 
 <style scoped>

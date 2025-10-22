@@ -18,17 +18,13 @@
     </div>
     <p :id="ANIMATED_ELEMENT_IDS.INTRO_PAGE.TAGLINE" class="tagline">
       Flawless forms,
-      <NuxtLink :to="ROUTES.HOME_PAGE">just add water.</NuxtLink>
+      <NuxtLink to="/home">just add water.</NuxtLink>
     </p>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ROUTES, ANIMATED_ELEMENT_IDS } from "~/constants";
-
-definePageMeta({
-  path: ROUTES.INTRO_PAGE,
-});
+import { ANIMATED_ELEMENT_IDS } from "~/constants";
 </script>
 
 <style scoped>

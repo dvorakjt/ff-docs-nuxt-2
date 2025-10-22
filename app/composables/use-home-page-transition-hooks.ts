@@ -1,7 +1,7 @@
+import { Routes} from "~/generated/routes";
 import {
   ANIMATED_ELEMENT_IDS,
   PAGE_TRANSITION_ANIMATION_PROPERTIES,
-  ROUTES,
 } from "~/constants";
 import {
   addFadeInAnimationToTimeline,
@@ -22,9 +22,12 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
   const pageTransitionAnimationsStore = usePageTransitionAnimationsStore();
 
   function onBeforeHomePageLeave(homePage: Element) {
+    // preserveScrollPosition(homePage as HTMLElement);
+
     const heading = homePage.querySelector(
       "#" + ANIMATED_ELEMENT_IDS.HOME_PAGE.HEADING
     )!;
+
     recordHeadingRect(heading);
   }
 
@@ -35,7 +38,7 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
   }
 
   function onHomePageEnter(homePage: Element, done: () => void) {
-    if (routeTransitionsStore.from === ROUTES.INTRO_PAGE) {
+    if (routeTransitionsStore.from === Routes.Index) {
       onHomePageEnterFromIntroPage(homePage, done);
     } else {
       console.log("enter");
@@ -132,7 +135,7 @@ export function useHomePageTransitionHooks(): HomePageTransitionHooks {
   }
 
   function shouldExecuteFullAnimationOnLeave() {
-    if (routeTransitionsStore.to === ROUTES.INTRO_PAGE) {
+    if (routeTransitionsStore.to === Routes.Index) {
       const headingRect =
         pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
 

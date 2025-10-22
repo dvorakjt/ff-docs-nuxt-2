@@ -1,4 +1,4 @@
-import { ROUTES } from "~/constants";
+import { Routes} from "~/generated/routes";
 import type { BackgroundMode } from "~/model";
 
 interface PageTransitionAnimationsStoreState {
@@ -26,9 +26,9 @@ export const usePageTransitionAnimationsStore = defineStore<
     const route = useRoute();
 
     return {
-      showHeader: route.path !== ROUTES.INTRO_PAGE,
+      showHeader: route.path !== Routes.Index,
       backgroundMode:
-        route.path === ROUTES.INTRO_PAGE ? "collapsed" : "expanded",
+        route.path === Routes.Index ? "collapsed" : "expanded",
       lastKnownElementRects: {
         header: {
           logo: null,

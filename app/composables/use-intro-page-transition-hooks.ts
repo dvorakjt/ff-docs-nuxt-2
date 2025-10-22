@@ -1,7 +1,7 @@
+import { Routes} from "~/generated/routes";
 import {
   ANIMATED_ELEMENT_IDS,
   PAGE_TRANSITION_ANIMATION_PROPERTIES,
-  ROUTES,
 } from "~/constants";
 import {
   touchElementsExceptExcludedElementsAndTheirAncestors,
@@ -53,7 +53,7 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
   }
 
   function shouldExecuteFullAnimationOnEnter() {
-    if (routeTransitionsStore.from === ROUTES.HOME_PAGE) {
+    if (routeTransitionsStore.from === Routes.Home) {
       const homePageHeadingRect =
         pageTransitionAnimationsStore.lastKnownElementRects.homePage.heading!;
       const isHomePageHeadingVisible =
@@ -247,7 +247,7 @@ export function useIntroPageTransitionHooks(): IntroPageTransitionHooks {
   }
 
   function onIntroPageLeave(introPage: Element, done: () => void) {
-    if (routeTransitionsStore.to === ROUTES.HOME_PAGE) {
+    if (routeTransitionsStore.to === Routes.Home) {
       onIntroPageLeaveToHomePage(introPage, done);
     } else {
       onIntroPageLeaveToAnyPage(introPage, done);

@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@hypernym/nuxt-gsap": "^2.4.3",
+    "@types/node": "^24.9.1",
     "sass": "^1.93.2"
   }
 }
